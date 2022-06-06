@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tensorflow JS</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+</head>
+
+<body>
+    <h1>Mis pruebas</h1>
+    <div id="resultado">.</div>
+    <script>
+        //var modelo = tf.loadLayersModel('modelo/modelo.json');
+        async function learnLinear() {
+            const model = tf.sequential();
+            model.add(tf.layers.dense({ units: 1, inputShape: [1] }));
+
+//optimizador de median de gradiente descendente
+            model.compile({
+                loss: 'meanSquaredError',
+                optimizer: 'sgd'
+            });
+//datos de entrenamiento y estructura de los datos
+            const xs = tf.tensor2d([-1, 0, 1, 2, 3, 4], [6, 1]);
+            const ys = tf.tensor2d([-3, -1, 1, 3, 5, 7], [6, 1]);
+
+            //Entrenamiento de 500 epocas
+            await model.fit(xs, ys, { epochs: 500 });
+
+            //escribir resultado en html
+            document.getElementById('resultado').innerHTML = 
+            model.predict(tf.tensor2d([20], [1, 1]));
+            }
+            
+            learnLinear();
+    </script>
+</body>
+
+</html>
